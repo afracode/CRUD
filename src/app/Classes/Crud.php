@@ -62,5 +62,91 @@ class Crud
     }
 
 
+    public function setEntity(string $entities)
+    {
+        $this->entities = $entities;
+    }
+
+
+    public function setModel(string $model)
+    {
+        $this->model = $model;
+        $this->object = new $model();
+    }
+
+
+    public function setRow(int $id)
+    {
+        $this->row = $this->model::find($id);
+        return $this;
+    }
+
+
+    public function setColumns($columns)
+    {
+        $this->columns = [];
+
+        foreach ($columns as $column) {
+            array_push($this->columns,
+                [
+                    'data' => $column,
+                    'name' => $column,
+                    'orderable' => 1,
+                    'searchable' => 1,
+                ]
+            );
+        }
+
+        return $this;
+    }
+
+
+    public function setColumn($data, $title = null, $orderable = null, $searchable = null)
+    {
+        array_push($this->columns,
+            [
+                'data' => $data,
+                'name' => $title ?? ucfirst($data),
+                'orderable' => $orderable ?? 1,
+                'searchable' => $searchable ?? 1,
+            ]
+        );
+
+        return $this;
+    }
+
+
+    public function setField($field)
+    {
+        array_push($this->fields, $field);
+        return $this;
+    }
+
+
+    public function setDefaults()
+    {
+
+        if (!$this->row)
+            return 0;
+
+        for ($i = 0; $i < count($this->fields); $i++) {
+
+            if (in_array($this->fields[$i]['type'], ['select2_multiple'])) {
+                continue;
+            }
+
+            $name = $this->fields[$i]['name'] ?? $this->fields[$i]['method'];
+            $this->fields[$i]['value'] = $this->row->$name ?? null;
+        }
+
+
+    }
+
+
+    public function resetFields()
+    {
+        $this->fields = [];
+        return $this;
+    }
 
 }
