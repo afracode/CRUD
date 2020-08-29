@@ -26,6 +26,11 @@
             "email": "kourosh@afracode.com"
         }
     ],
+    "require": {
+        "laravel/framework": "^7.0",
+        "doctrine/dbal": "^2.5",
+        "guzzlehttp/guzzle": "^7.0|^6.3"
+    },
     "autoload": {
         "psr-4": {
             "Afracode\\CRUD\\": "src"
