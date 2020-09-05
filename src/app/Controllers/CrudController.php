@@ -212,4 +212,48 @@ class CrudController extends Controller
 
         return redirect()->back()->with('success', 'User updated successfully');
     }
+
+
+    public function store(Request $request)
+    {
+
+        $path = $this->crud->tmpPath;
+
+        $this->setupCreate();
+
+        $this->validate($request, $this->crud->getValidations());
+
+        $fields = $request->only($this->crud->getFields('name'));
+
+        $new = $this->crud->model::create($fields);
+
+
+        if ($this->crud->hasTrait('HasRoles')) {
+            $this->crud->row->assignRole($request->input('roles'));
+            $this->crud->row->givePermissionTo($request->input('permissions'));
+        }
+
+
+        foreach ($request->input('mediable', []) as $file) {
+
+            $new->addMedia(storage_path($path . $file))->toMediaCollection();
+        }
+
+        return redirect($this->crud->route('index'));
+    }
+
+
+    public function destroy($id)
+    {
+        $row = $this->crud->model::find($id);
+
+        if ($this->crud->hasTrait('InteractsWithMedia')) {
+            foreach ($row->getMedia('*') as $media)
+                $media->delete();
+        }
+
+        $row->delete();
+
+        return true;
+    }
 }
