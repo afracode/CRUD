@@ -86,5 +86,67 @@ class CrudController extends Controller
     }
 
 
+    public function storeMedia(Request $request)
+    {
+        $path = $this->crud->tmpPath;
+
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+
+        $file = $request->file('file');
+
+        $name = uniqid() . '_' . trim($file->getClientOriginalName());
+
+        $file->move($path, $name);
+
+        return response()->json([
+            'name' => $name,
+            'original_name' => $file->getClientOriginalName(),
+        ]);
+
+    }
+
+
+    public function getMedia($id)
+    {
+
+        $row = $this->crud->model::find($id);
+
+        $medias = $row->media;
+
+
+        $result = [];
+
+        foreach ($medias as $media)
+            $result[] = [
+                "name" => $media->name,
+                "size" => $media->size,
+                "url" => $media->getUrl(),
+                "type" => $media->type,
+            ];
+
+        return $result;
+
+
+    }
+
+
+    public function deleteMedia($name)
+    {
+        $media = Media::where('name', $name)->first();
+
+        if (!$media)
+            return false;
+
+        Storage::delete($media->getPath());
+
+        if (file_exists($media->getPath()))
+            unlink($media->getPath());
+
+        $media->delete();
+
+        return true;
+    }
 
 }
