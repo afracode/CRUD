@@ -149,4 +149,44 @@ class Crud
         return $this;
     }
 
+
+    public function getRelated($object, $methodName)
+    {
+        return get_class($object->{$methodName}()->getRelated());
+    }
+
+
+    public function hasTrait($traitName)
+    {
+        $traits = class_uses($this->object, true);
+
+        $traits = array_map(function ($n) {
+            $class_parts = explode('\\', $n);
+            return end($class_parts);
+        }, $traits);
+
+        return array_search($traitName, $traits) !== false;
+    }
+
+    public function getRelationType($object, $methodName)
+    {
+        $relationType = new \ReflectionClass($object->{$methodName}());
+        return $relationType->getShortName();
+    }
+
+    public function reflectionMethod($object, $methodName)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, []);
+    }
+
+    public function reflectionProperty($object, $propertyName)
+    {
+        $property = new \ReflectionProperty($object, $propertyName);
+        $property->setAccessible(true);
+        return $property->getValue($object);
+    }
+
 }
