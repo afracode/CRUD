@@ -27,9 +27,9 @@
         }
     ],
     "require": {
-        "laravel/framework": "^7.0",
-        "doctrine/dbal": "^2.5",
-        "guzzlehttp/guzzle": "^7.0|^6.3"
+        "spatie/laravel-medialibrary": "^8.0.0",
+        "spatie/laravel-permission": "^3.8",
+        "yajra/laravel-datatables-oracle": "^9.10"
     },
     "autoload": {
         "psr-4": {

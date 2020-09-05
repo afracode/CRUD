@@ -2,8 +2,8 @@
 
 namespace Afracode\CRUD;
 
-use Afracode\CRUD\app\Overrides\CrudRegistrar;
-use Afracode\CRUD\app\Overrides\ResourceRegistrar;
+use Afracode\CRUD\App\Controllers\CrudController;
+use Afracode\CRUD\Overrides\ResourceRegistrar;
 use Illuminate\Support\ServiceProvider;
 
 class AfracodeServiceProvider extends ServiceProvider
@@ -24,10 +24,14 @@ class AfracodeServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/config/crud.php', 'router');
         include __DIR__ . '/routes/crud.php';
 
+        $this->app->make(CrudController::class);
+
         $registrar = new ResourceRegistrar($this->app['router']);
 
         $this->app->bind('Illuminate\Routing\ResourceRegistrar', function () use ($registrar) {
             return $registrar;
         });
+
+        $this->loadViewsFrom(__DIR__.'/resources/views', 'crud');
     }
 }
