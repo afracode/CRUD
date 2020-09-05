@@ -34,7 +34,9 @@ class Crud
         elseif (in_array($route, ['index', 'store']))
             return '/' . $entities;
         elseif ($route == 'datatable')
-            return '/ajx/' . $entities;
+            return '/datatable/' . $entities;
+        elseif ($route == 'deleteMedia')
+            return '/' . $entities . '/' . $id . '/media';
     }
 
 
@@ -232,6 +234,29 @@ class Crud
         }
 
         return $field;
+    }
+
+
+    public function getValidations()
+    {
+        $validations = [];
+
+        foreach ($this->fields as $field) {
+            $validations[$field['name'] ?? $field['method']] = $field['validation'] ?? null;
+        }
+        return array_filter($validations);
+    }
+
+
+    public function getDatatableColumns()
+    {
+        $datable_columns = "[";
+        foreach ($this->columns as $field):
+            $datable_columns .= "{data: '" . $field['data'] . "', name: '" . $field['data'] . "', orderable: " . ($field['orderable'] ? 'true' : 'false') . ", searchable: " . ($field['searchable'] ? 'true' : 'false') . "},";
+        endforeach;
+        $datable_columns .= "]";
+
+        return $datable_columns;
     }
 
 }
