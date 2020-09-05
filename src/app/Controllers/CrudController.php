@@ -162,4 +162,54 @@ class CrudController extends Controller
             ->make(true);
     }
 
+
+    public function update(Request $request, $id)
+    {
+        $this->crud->setRow($id);
+        $this->setupEdit();
+
+
+        $this->validate($request, array_merge($this->crud->getValidations()));
+
+        $input = $request->only($this->crud->getFields('name'));
+
+        if (!empty($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            $input = Arr::except($input, array('password'));
+
+        }
+
+        $this->crud->row->update($input);
+        DB::table('model_has_roles')->where('model_id', $id)->delete();
+        DB::table('model_has_permissions')->where('model_id', $id)->delete();
+
+
+        if ($this->crud->hasTrait('HasRoles')) {
+            $this->crud->row->assignRole($request->input('roles'));
+            $this->crud->row->givePermissionTo($request->input('permissions'));
+        }
+
+
+        $input = $request->all();
+        if (!empty($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            $input = $request->except(['password']);
+        }
+
+
+        if ($this->crud->hasTrait('InteractsWithMedia')) {
+            $media = $this->crud->row->getMedia('*')->pluck('file_name')->toArray();
+
+            foreach ($request->input('mediable', []) as $file) {
+                if (count($media) === 0 || !in_array($file, $media)) {
+                    $this->crud->row->addMedia(storage_path('tmp/' . $file))->toMediaCollection();
+                }
+            }
+        }
+
+
+        return redirect()->back()->with('success', 'User updated successfully');
+    }
 }
