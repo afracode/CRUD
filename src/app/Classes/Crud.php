@@ -168,11 +168,13 @@ class Crud
         return array_search($traitName, $traits) !== false;
     }
 
+
     public function getRelationType($object, $methodName)
     {
         $relationType = new \ReflectionClass($object->{$methodName}());
         return $relationType->getShortName();
     }
+
 
     public function reflectionMethod($object, $methodName)
     {
@@ -182,11 +184,54 @@ class Crud
         return $method->invokeArgs($object, []);
     }
 
+
     public function reflectionProperty($object, $propertyName)
     {
         $property = new \ReflectionProperty($object, $propertyName);
         $property->setAccessible(true);
         return $property->getValue($object);
+    }
+
+
+    public function getFields($key = null)
+    {
+        if ($key) {
+            $values = [];
+            for ($i = 0; $i < count($this->fields); $i++)
+                $values[] = $this->checkRelationField($this->fields[$i])[$key] ?? '';
+            return $values;
+        }
+
+        for ($i = 0; $i < count($this->fields); $i++) {
+
+            foreach ($this->fields[$i] as $key => $value) {
+                $this->fields[$i] = $this->checkRelationField($this->fields[$i]);
+            }
+        }
+
+
+        return $this->fields;
+    }
+
+
+    public function checkRelationField($field)
+    {
+        if ($field['type'] !== 'relation')
+            return $field;
+
+
+        foreach (array_keys($field) as $key) {
+            $relationType = $this->getRelationType($this->object, $field['method']);
+
+            $field['type'] = $this->isMultiple($relationType) ? 'select2_multiple' : 'select2';
+            $field['attribute'] = $field['attribute'] ?? 'id';
+            $field['model'] = $this->getRelated($this->object, $field['method']);
+
+            if (!$this->isMultiple($relationType))
+                $field['name'] = $this->reflectionProperty($this->reflectionMethod($this->object, $field['method']), 'foreignKey');
+        }
+
+        return $field;
     }
 
 }
