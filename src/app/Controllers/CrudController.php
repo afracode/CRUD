@@ -5,7 +5,10 @@ namespace Afracode\CRUD\App\Controllers;
 
 
 use Afracode\CRUD\app\Classes\Crud;
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +18,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class CrudController extends Controller
 {
+
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public $crud;
 
@@ -86,7 +91,7 @@ class CrudController extends Controller
     }
 
 
-    public function storeMedia(Request $request)
+    public function storeMedia1(Request $request)
     {
         $path = $this->crud->tmpPath;
 
@@ -156,7 +161,7 @@ class CrudController extends Controller
         return \Yajra\DataTables\DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('dashboard.partials.actions', ['id' => $row->id, 'crud' => $this->crud]);
+                return view('crud::dashboard.partials.actions', ['id' => $row->id, 'crud' => $this->crud]);
             })
             ->rawColumns(['action'])
             ->make(true);
