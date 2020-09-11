@@ -21,7 +21,8 @@ class AfracodeServiceProvider extends ServiceProvider
 
     public function boot(\Illuminate\Routing\Router $router)
     {
-        $this->mergeConfigFrom(__DIR__ . '/config/crud.php', 'router');
+        $this->mergeConfigFrom(__DIR__ . '/config/crud.php', 'crud');
+
         include __DIR__ . '/routes/crud.php';
 
         $this->app->make(CrudController::class);
@@ -32,6 +33,21 @@ class AfracodeServiceProvider extends ServiceProvider
             return $registrar;
         });
 
-        $this->loadViewsFrom(__DIR__.'/resources/views', 'crud');
+        $this->loadViewsFrom(__DIR__ . '/resources/views', 'crud');
+
+
+        require_once __DIR__ . '/helpers.php';
+
+
+
+        $this->publishFiles();
+
+    }
+
+
+    public function publishFiles()
+    {
+
+        $this->publishes( [__DIR__ . '/config' => config_path()] , 'config');
     }
 }

@@ -1,4 +1,4 @@
-@extends('crud::dashboard.base')
+@extends(crudView('base'))
 
 @section('content')
     <div class="container-fluid">

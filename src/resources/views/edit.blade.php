@@ -1,4 +1,4 @@
-@extends('crud::dashboard.base')
+@extends(crudView('base'))
 
 @section('content')
     <div class="container-fluid">
@@ -10,7 +10,7 @@
                             <i class="fa fa-align-justify"></i> {{ __('Edit') }}</div>
                         <div class="card-body">
                             <br>
-                            @include('crud::dashboard.partials.alert')
+                            @include('crud::partials.alert')
                             <form method="POST" action="{{$crud->route('update' , $crud->row->id)}}">
                                 @csrf
                                 @method('PUT')
@@ -19,7 +19,7 @@
                                         <div class="col-xs-12 col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 @isset($field['label'])<strong>{{$field['label']}}:</strong>@endisset
-                                                @include('crud::dashboard.fields.'.$field['type'], ['field' => $field , 'class' => 'form-control'])
+                                                @include('crud::fields.'.$field['type'], ['field' => $field , 'class' => 'form-control'])
                                             </div>
                                         </div>
                                     @endforeach

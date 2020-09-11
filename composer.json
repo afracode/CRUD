@@ -34,6 +34,7 @@
     "autoload": {
         "psr-4": {
             "Afracode\\CRUD\\": "src"
-        }
+        },
+        "files": ["src/helpers.php"]
     }
 }

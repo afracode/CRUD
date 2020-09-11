@@ -58,7 +58,7 @@ class CrudController extends Controller
     public function index()
     {
         $this->setupIndex();
-        return view('crud::dashboard.datatable', ['crud' => $this->crud]);
+        return view('crud::datatable', ['crud' => $this->crud]);
     }
 
 
@@ -67,7 +67,7 @@ class CrudController extends Controller
         $this->crud->resetFields();
         $this->setupCreate();
 
-        return view('crud::dashboard.create',
+        return view('crud::create',
             [
                 'crud' => $this->crud
             ]
@@ -83,7 +83,7 @@ class CrudController extends Controller
         $this->crud->setDefaults();
 
 
-        return view('crud::dashboard.edit',
+        return view('crud::edit',
             [
                 'crud' => $this->crud
             ]
@@ -161,7 +161,7 @@ class CrudController extends Controller
         return \Yajra\DataTables\DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('crud::dashboard.partials.actions', ['id' => $row->id, 'crud' => $this->crud]);
+                return view('crud::partials.actions', ['id' => $row->id, 'crud' => $this->crud]);
             })
             ->rawColumns(['action'])
             ->make(true);
