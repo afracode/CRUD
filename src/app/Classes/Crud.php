@@ -34,7 +34,7 @@ class Crud
         elseif (in_array($route, ['index', 'store']))
             return '/' . $entities;
         elseif ($route == 'datatable')
-            return '/datatable/' . $entities;
+            return $entities . '/datatable/';
         elseif ($route == 'deleteMedia')
             return '/' . $entities . '/' . $id . '/media';
     }

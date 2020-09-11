@@ -48,7 +48,11 @@
                 serverSide: true,
                 ajax: {
                     url: "{{$crud->route('datatable')}}",
-                    method: "GET"
+                    method: "POST"
+                    ,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
                 },
                 columns: {!! $crud->getDatatableColumns() !!}
             });
