@@ -26,7 +26,7 @@
                                     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                                         <button class="btn btn-block btn-success"
                                                 type="submit">{{ __('Save') }}</button>
-                                        <a href="{{ route('users.index') }}"
+                                        <a href="{{ $crud->route('index') }}"
                                            class="btn btn-block btn-primary">{{ __('Return') }}</a>
                                     </div>
                                 </div>

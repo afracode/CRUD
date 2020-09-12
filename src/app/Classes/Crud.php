@@ -4,6 +4,8 @@
 namespace Afracode\CRUD\App\Classes;
 
 
+use Illuminate\Support\Arr;
+
 class Crud
 {
 
@@ -15,6 +17,7 @@ class Crud
     public $tmpPath;
     public $row;
     public $query;
+    private $reserved_field_key;
 
     public function __construct()
     {
@@ -35,7 +38,7 @@ class Crud
         elseif (in_array($route, ['index', 'store']))
             return '/' . $entities;
         elseif ($route == 'datatable')
-            return $entities . '/datatable/';
+            return '/' . $entities . '/datatable/';
         elseif ($route == 'deleteMedia')
             return '/' . $entities . '/' . $id . '/media';
     }
@@ -129,7 +132,28 @@ class Crud
 
     public function setField($field)
     {
-        array_push($this->fields, $field);
+        Arr::where($this->fields, function ($value, $key) use ($field) {
+            if ($value['name'] == $field["name"])
+                $this->reserved_field_key = $key;
+        });
+
+
+        if ($this->reserved_field_key)
+            $this->fields[$this->reserved_field_key] = $field;
+        else
+            array_push($this->fields, $field);
+
+        return $this;
+    }
+
+    public function removeField($fieldName)
+    {
+        Arr::where($this->fields, function ($value, $key) use ($fieldName) {
+            if ($value['name'] == $fieldName)
+                unset($this->fields[$key]);
+        });
+
+
         return $this;
     }
 
@@ -140,14 +164,15 @@ class Crud
         if (!$this->row)
             return 0;
 
-        for ($i = 0; $i < count($this->fields); $i++) {
 
-            if (in_array($this->fields[$i]['type'], ['select2_multiple'])) {
+
+        foreach (array_keys($this->fields) as $key) {
+            if (in_array($this->fields[$key]['type'], ['select2_multiple'])) {
                 continue;
             }
 
-            $name = $this->fields[$i]['name'] ?? $this->fields[$i]['method'];
-            $this->fields[$i]['value'] = $this->row->$name ?? null;
+            $name = $this->fields[$key]['name'] ?? $this->fields[$key]['method'];
+            $this->fields[$key]['value'] = $this->row->$name ?? null;
         }
 
 
@@ -213,10 +238,9 @@ class Crud
             return $values;
         }
 
-        for ($i = 0; $i < count($this->fields); $i++) {
-
-            foreach ($this->fields[$i] as $key => $value) {
-                $this->fields[$i] = $this->checkRelationField($this->fields[$i]);
+        foreach (array_keys($this->fields) as $key) {
+            foreach ($this->fields[$key] as  $value) {
+                $this->fields[$key] = $this->checkRelationField($this->fields[$key]);
             }
         }
 
