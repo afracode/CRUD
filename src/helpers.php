@@ -22,3 +22,12 @@ if (! function_exists('crudView')) {
         return $returnView;
     }
 }
+
+
+if (!function_exists('crudRequired')) {
+    function crudFieldRequired($field)
+    {
+        if (isset($field['validation']) && (strpos($field['validation'],'required') !== false))
+            return config('crud.field_required_span');
+    }
+}
