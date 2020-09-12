@@ -9,12 +9,13 @@
                         <div class="card-header">
                             <i class="fa fa-align-justify"></i>{{ __('Users') }}</div>
                         <div class="card-body">
-                            <div class="row">
+
                                 @can($crud->permission('delete'))
-                                    <a href="{{$crud->route('create')}}" class="btn btn-primary m-2">Add
-                                        New</a>
+                                    <a href="{{$crud->route('create')}}" class="btn btn-primary m-2" style="margin-bottom: 30px !important; ">
+                                        {{__('crud.insert')}}
+                                    </a>
                                 @endcan
-                            </div>
+
 
                             <table class="table table-bordered data-table" id="laravel_datatable">
                                 <thead>
@@ -40,7 +41,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#laravel_datatable').DataTable({
