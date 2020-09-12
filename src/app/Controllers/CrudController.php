@@ -155,15 +155,30 @@ class CrudController extends Controller
     }
 
 
+    public function test()
+    {
+
+    }
+
     public function dataTable()
     {
-        return \Yajra\DataTables\DataTables::of($this->crud->query)
+        $this->setupIndex();
+
+        $datatable = \Yajra\DataTables\DataTables::of($this->crud->query)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 return view('crud::partials.actions', ['id' => $row->id, 'crud' => $this->crud]);
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+            })->rawColumns(['action']);
+
+
+        foreach ($this->crud->columns as $column) {
+            if ($column['change_to'])
+                $datatable = $datatable->editColumn($column['data'], $column['change_to']);
+        }
+
+
+        return $datatable->make(true);
+
     }
 
 

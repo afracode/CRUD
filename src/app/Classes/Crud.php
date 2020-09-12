@@ -113,10 +113,17 @@ class Crud
                 'name' => $title ?? ucfirst($data),
                 'orderable' => $orderable ?? 1,
                 'searchable' => $searchable ?? 1,
+                'change_to' => null,
             ]
         );
 
         return $this;
+    }
+
+    public function editColumn($changeTo)
+    {
+        $index = count($this->columns) - 1;
+        $this->columns[$index]['change_to'] = $changeTo;
     }
 
 
