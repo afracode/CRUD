@@ -157,8 +157,7 @@ class CrudController extends Controller
 
     public function dataTable()
     {
-        $data = $this->crud->model::select('*');
-        return \Yajra\DataTables\DataTables::of($data)
+        return \Yajra\DataTables\DataTables::of($this->crud->query)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 return view('crud::partials.actions', ['id' => $row->id, 'crud' => $this->crud]);

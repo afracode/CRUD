@@ -14,6 +14,7 @@ class Crud
     public $object;
     public $tmpPath;
     public $row;
+    public $query;
 
     public function __construct()
     {
@@ -74,6 +75,7 @@ class Crud
     {
         $this->model = $model;
         $this->object = new $model();
+        $this->query = $this->model::select('*');
     }
 
 
