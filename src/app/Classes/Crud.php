@@ -20,10 +20,12 @@ class Crud
     public $row;
     public $query;
     private $reserved_field_key;
+    private $actions;
 
     public function __construct()
     {
         $this->tmpPath = storage_path('tmp');
+        $this->actions = ['read', 'create', 'edit', 'delete'];
     }
 
 
@@ -80,7 +82,7 @@ class Crud
     {
         $this->model = $model;
         $this->object = new $model();
-        $this->query = $this->model::select('*');
+        $this->query = $this->model::select('*')->orderBy('id', 'Desc');
     }
 
 
@@ -112,10 +114,11 @@ class Crud
 
     public function setColumn($data, $title = null, $orderable = null, $searchable = null)
     {
+        $td = trans('db.' . $data);
         array_push($this->columns,
             [
                 'data' => $data,
-                'name' => $title ?? ucfirst($data),
+                'name' => $title ?? ((stripos($td, "db.") === false) ? $td : ucfirst($data)),
                 'orderable' => $orderable ?? 1,
                 'searchable' => $searchable ?? 1,
                 'change_to' => null,
@@ -155,7 +158,6 @@ class Crud
         return $this;
     }
 
-
     public function removeField($fieldName)
     {
         Arr::where($this->fields, function ($value, $key) use ($fieldName) {
@@ -176,7 +178,7 @@ class Crud
 
 
         foreach (array_keys($this->fields) as $key) {
-            if (in_array($this->fields[$key]['type'], ['select2_multiple'])) {
+            if (in_array($this->fields[$key]['type'], ['relation_multiple'])) {
                 continue;
             }
 
@@ -267,7 +269,7 @@ class Crud
         foreach (array_keys($field) as $key) {
             $relationType = $this->getRelationType($this->object, $field['method']);
 
-            $field['type'] = $this->isMultiple($relationType) ? 'select2_multiple' : 'select2';
+            $field['type'] = $this->isMultiple($relationType) ? 'relation_multiple' : 'relation';
             $field['attribute'] = $field['attribute'] ?? 'id';
             $field['model'] = $this->getRelated($this->object, $field['method']);
 
@@ -299,6 +301,19 @@ class Crud
         $datable_columns .= "]";
 
         return $datable_columns;
+    }
+
+
+    public function hasAction($action)
+    {
+        return in_array($action, $this->actions);
+
+    }
+
+
+    public function customActions($actions)
+    {
+        $this->actions = $actions;
     }
 
 }
