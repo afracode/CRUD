@@ -4,10 +4,12 @@
 namespace Afracode\CRUD\App\Classes;
 
 
+use Afracode\CRUD\App\Classes\Traits\Datatable;
 use Illuminate\Support\Arr;
 
 class Crud
 {
+    use Datatable;
 
     public $model;
     public $entities;
