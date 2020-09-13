@@ -10,17 +10,22 @@
                             <i class="fa fa-align-justify"></i>{{ __('Users') }}</div>
                         <div class="card-body">
 
+                            @if($crud->hasAction('create'))
                                 @can($crud->permission('delete'))
-                                    <a href="{{$crud->route('create')}}" class="btn btn-primary m-2" style="margin-bottom: 30px !important; ">
+                                    <a href="{{$crud->route('create')}}" class="btn btn-primary m-2"
+                                       style="margin-bottom: 30px !important; ">
                                         {{__('crud.insert')}}
                                     </a>
                                 @endcan
+                            @endif
 
 
                             <table class="table table-bordered data-table" id="laravel_datatable">
                                 <thead>
                                 <tr>
+
                                     @foreach($crud->columns as $column)
+
                                         <th>{{$column['name']}}</th>
                                     @endforeach
                                 </tr>
