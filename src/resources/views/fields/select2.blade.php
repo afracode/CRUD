@@ -1,13 +1,7 @@
 @php
     $current_value = old($field['name']) ?? $field['value'] ?? $field['default'] ?? '';
-    if (is_object($current_value) && is_subclass_of(get_class($current_value), 'Illuminate\Database\Eloquent\Model') ) {
-        $current_value = $current_value->getKey();
-    }
-    if (!isset($field['options'])) {
-        $options = $field['model']::all();
-    } else {
-        $options = call_user_func($field['options'], $field['model']::query());
-    }
+    $options = $field['options'];
+
 @endphp
 
 
@@ -17,11 +11,11 @@
 >
 
     @if (count($options))
-        @foreach ($options as $option)
-            @if($current_value == $option->getKey())
-                <option value="{{ $option->getKey() }}" selected>{{ $option->{$field['attribute']} }}</option>
+        @foreach ($options as $key => $value)
+            @if($current_value == $key)
+                <option value="{{ $key }}" selected>{{ $value}}</option>
             @else
-                <option value="{{ $option->getKey() }}">{{ $option->{$field['attribute']} }}</option>
+                <option value="{{ $key }}">{{ $value}}</option>
             @endif
         @endforeach
     @endif
