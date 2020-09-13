@@ -123,6 +123,7 @@ class Crud
         return $this;
     }
 
+
     public function editColumn($changeTo)
     {
         $index = count($this->columns) - 1;
@@ -133,8 +134,14 @@ class Crud
     public function setField($field)
     {
         Arr::where($this->fields, function ($value, $key) use ($field) {
-            if ($value['name'] == $field["name"])
-                $this->reserved_field_key = $key;
+            if (isset($value['name']) && isset($field["name"])) {
+                if (($value['name'] == $field["name"]))
+                    $this->reserved_field_key = $key;
+            } elseif (isset($value['method']) && isset($field["method"])) {
+                if (($value['method'] == $field["method"]))
+                    $this->reserved_field_key = $key;
+            }
+
         });
 
 
@@ -145,6 +152,7 @@ class Crud
 
         return $this;
     }
+
 
     public function removeField($fieldName)
     {
@@ -163,7 +171,6 @@ class Crud
 
         if (!$this->row)
             return 0;
-
 
 
         foreach (array_keys($this->fields) as $key) {
@@ -239,7 +246,7 @@ class Crud
         }
 
         foreach (array_keys($this->fields) as $key) {
-            foreach ($this->fields[$key] as  $value) {
+            foreach ($this->fields[$key] as $value) {
                 $this->fields[$key] = $this->checkRelationField($this->fields[$key]);
             }
         }
