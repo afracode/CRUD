@@ -243,7 +243,7 @@ class CrudController extends Controller
 
         $this->validate($request, $this->crud->getValidations());
 
-        $fields = $request->only($this->crud->getFields('name'));
+        $fields =  $fields = $this->crud->getFormInputs($request);;
 
         $new = $this->crud->model::create($fields);
 

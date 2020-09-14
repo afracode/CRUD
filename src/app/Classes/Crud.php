@@ -205,7 +205,10 @@ class Crud
                 continue;
             }
 
+
             $name = $this->fields[$key]['name'] ?? $this->fields[$key]['method'];
+
+
             $this->fields[$key]['value'] = $this->row->$name ?? null;
         }
 
@@ -285,6 +288,7 @@ class Crud
 
     public function checkRelationField($field)
     {
+
         if ($field['type'] !== 'relation')
             return $field;
 
@@ -308,7 +312,7 @@ class Crud
     {
         $validations = [];
 
-        foreach ($this->fields as $field) {
+        foreach ($this->getFields() as $field) {
             $validations[$field['name'] ?? $field['method']] = $field['validation'] ?? null;
         }
         return array_filter($validations);
@@ -337,6 +341,30 @@ class Crud
     public function customActions($actions)
     {
         $this->actions = $actions;
+    }
+
+
+    public function checkInputsBeforeSet($fields)
+    {
+        foreach ($this->getFields() as $field) {
+            $key = $field['name'];
+            if (isset($field['adaptForDatabase'])) {
+                $func = $field['adaptForDatabase'];
+                $fields[$key] = $func($fields[$key]);
+            } elseif (is_callable(config('crud.fields.adaptForDatabase.' . $field['type']))) {
+                $func = config('crud.fields.adaptForDatabase.' . $field['type']);
+                $fields[$key] = $func($fields[$key]);
+            }
+        }
+
+        return $fields;
+    }
+
+
+    public function getFormInputs($request)
+    {
+        $inputs = $request->only($this->getFields('name'));
+        return $this->checkInputsBeforeSet($inputs);
     }
 
 }
