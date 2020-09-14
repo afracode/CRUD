@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -58,7 +59,7 @@ class CrudController extends Controller
     public function index()
     {
         $this->setupIndex();
-        return view('crud::datatable', ['crud' => $this->crud]);
+        return view(crudView('datatable'), ['crud' => $this->crud]);
     }
 
 
@@ -67,7 +68,7 @@ class CrudController extends Controller
         $this->crud->resetFields();
         $this->setupCreate();
 
-        return view('crud::create',
+        return view(crudView('create'),
             [
                 'crud' => $this->crud
             ]
@@ -83,7 +84,7 @@ class CrudController extends Controller
         $this->crud->setDefaults();
 
 
-        return view('crud::edit',
+        return view(crudView('edit'),
             [
                 'crud' => $this->crud
             ]
@@ -229,7 +230,7 @@ class CrudController extends Controller
         }
 
 
-        return redirect()->back()->with('success', 'User updated successfully');
+        return redirect()->back()->with('success', trans('message.updated'));
     }
 
 

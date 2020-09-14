@@ -7,7 +7,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <i class="fa fa-align-justify"></i> {{ __('Edit') }}</div>
+                            <i class="fa fa-align-justify"></i> {{  trans('crud.create')  }}</div>
                         <div class="card-body">
                             <br>
                             @include('crud::partials.alert')
@@ -24,9 +24,9 @@
                                     @endforeach
                                     <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                                         <button class="btn btn-block btn-success"
-                                                type="submit">{{ __('Save') }}</button>
+                                                type="submit">{{  trans('crud.save')  }}</button>
                                         <a href="{{ $crud->route('index') }}"
-                                           class="btn btn-block btn-primary">{{ __('Return') }}</a>
+                                           class="btn btn-block btn-primary">{{ trans('crud.return') }}</a>
                                     </div>
                                 </div>
                             </form>
