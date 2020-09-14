@@ -114,11 +114,10 @@ class Crud
 
     public function setColumn($data, $title = null, $orderable = null, $searchable = null)
     {
-        $td = trans('db.' . $data);
         array_push($this->columns,
             [
                 'data' => $data,
-                'name' => $title ?? ((stripos($td, "db.") === false) ? $td : ucfirst($data)),
+                'name' => $title ?? ((stripos(trans('db.' . $data), "db.") === false) ? trans('db.' . $data) : ucfirst($data)),
                 'orderable' => $orderable ?? 1,
                 'searchable' => $searchable ?? 1,
                 'change_to' => null,
@@ -136,8 +135,19 @@ class Crud
     }
 
 
+    public function initFieldType($field, $defaultType = "text")
+    {
+        if (!isset($field['type']))
+            $field['type'] = "text";
+
+        return $field;
+    }
+
+
     public function setField($field)
     {
+        $field = $this->initFieldType($field);
+
         Arr::where($this->fields, function ($value, $key) use ($field) {
             if (isset($value['name']) && isset($field["name"])) {
                 if (($value['name'] == $field["name"]))
@@ -148,7 +158,6 @@ class Crud
             }
 
         });
-
 
         if ($this->reserved_field_key)
             $this->fields[$this->reserved_field_key] = $field;
