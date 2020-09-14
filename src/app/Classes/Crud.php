@@ -159,12 +159,26 @@ class Crud
 
         });
 
+        $field = $this->initFieldLabel($field);
+
+
         if ($this->reserved_field_key)
             $this->fields[$this->reserved_field_key] = $field;
         else
             array_push($this->fields, $field);
 
         return $this;
+    }
+
+
+    public function initFieldLabel($field)
+    {
+
+        $field['name'] = isset($field['name']) ? $field['name'] : $field['method'];
+
+        $field['label'] = $field['label'] ?? ((stripos(trans('db.' . $field['name']), "db.") === false) ? trans('db.' . $field['name']) : ucfirst($field['name']));
+
+        return $field;
     }
 
     public function removeField($fieldName)
