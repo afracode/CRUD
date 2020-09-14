@@ -9,7 +9,7 @@
     name="{{ $field['name'] }}"
     class="{{$class}} select2-basic-single"
 >
-
+    <option selected>{{trans('crud.please_select')}}</option>
     @if (count($options))
         @foreach ($options as $key => $value)
             @if($current_value == $key)
