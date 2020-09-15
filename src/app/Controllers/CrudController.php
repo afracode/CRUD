@@ -52,7 +52,13 @@ class CrudController extends Controller
 
     public function setupEdit()
     {
+        $this->setupCreate();
+    }
 
+
+    public function setupShow()
+    {
+        $this->setupCreate();
     }
 
 
@@ -276,4 +282,22 @@ class CrudController extends Controller
 
         return true;
     }
+
+
+    public function show($id)
+    {
+        $this->crud->resetFields();
+        $this->crud->setRow($id);
+        $this->setupShow();
+        $this->crud->setDefaults();
+
+
+        return view(crudView('show'),
+            [
+                'crud' => $this->crud
+            ]
+        );
+    }
+
+
 }

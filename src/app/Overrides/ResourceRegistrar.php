@@ -1,8 +1,6 @@
 <?php
 
-namespace App\MyCustom\Routing;
-
-namespace Afracode\CRUD\app\Overrides;
+namespace Afracode\CRUD\App\Overrides;
 
 
 use Illuminate\Routing\ResourceRegistrar as OriginalRegistrar;

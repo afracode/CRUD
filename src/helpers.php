@@ -46,3 +46,17 @@ if (!function_exists('menuName')) {
 }
 
 
+if (!function_exists('crudShowLabel')) {
+    function crudShowLabel($field)
+    {
+        $trans = 'db.';
+        $trans .= $field['name'];
+        $value = "<strong>";
+        $value .= trans($trans);
+        $value .= ':';
+        $value .= "</strong>";
+
+
+        return $value;
+    }
+}
