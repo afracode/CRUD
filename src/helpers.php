@@ -31,3 +31,18 @@ if (!function_exists('crudRequired')) {
             return config('crud.field_required_span');
     }
 }
+
+
+if (!function_exists('menuName')) {
+    function menuName($menu)
+    {
+        $name = 'menu';
+        $name .= '.';
+        $name .= $menu->href;
+
+        return trans($name);
+
+    }
+}
+
+

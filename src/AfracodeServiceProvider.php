@@ -2,6 +2,7 @@
 
 namespace Afracode\CRUD;
 
+use Afracode\CRUD\app\Controller\Crud\MenuController;
 use Afracode\CRUD\App\Controllers\CrudController;
 use Afracode\CRUD\Overrides\ResourceRegistrar;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +22,10 @@ class AfracodeServiceProvider extends ServiceProvider
 
     public function boot(\Illuminate\Routing\Router $router)
     {
+
+        $this->app->make(MenuController::class);
+
+
         $this->mergeConfigFrom(__DIR__ . '/config/crud.php', 'crud');
 
         include __DIR__ . '/routes/crud.php';
@@ -34,6 +39,8 @@ class AfracodeServiceProvider extends ServiceProvider
         });
 
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'crud');
+
+
 
 
         require_once __DIR__ . '/helpers.php';
