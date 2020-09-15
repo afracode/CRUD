@@ -191,7 +191,7 @@ class CrudController extends Controller
 
         $this->validate($request, array_merge($this->crud->getValidations()));
 
-        $input = $request->only($this->crud->getFields('name'));
+        $input =  $fields = $this->crud->getFormInputs($request);
 
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
@@ -243,7 +243,7 @@ class CrudController extends Controller
 
         $this->validate($request, $this->crud->getValidations());
 
-        $fields =  $fields = $this->crud->getFormInputs($request);;
+        $fields =  $fields = $this->crud->getFormInputs($request);
 
         $new = $this->crud->model::create($fields);
 

@@ -210,6 +210,15 @@ class Crud
 
 
             $this->fields[$key]['value'] = $this->row->$name ?? null;
+
+
+            $func = config("crud.fields." . $this->fields[$key]['type'] . ".adaptDefault");
+
+
+            if (is_callable($func))
+                $this->fields[$key]['value'] = $func($this->fields[$key]['value']);
+
+
         }
 
 
@@ -348,11 +357,12 @@ class Crud
     {
         foreach ($this->getFields() as $field) {
             $key = $field['name'];
+            $func = config("crud.fields." . $field['type'] . ".adaptForDatabase");
+
             if (isset($field['adaptForDatabase'])) {
                 $func = $field['adaptForDatabase'];
                 $fields[$key] = $func($fields[$key]);
-            } elseif (is_callable(config('crud.fields.adaptForDatabase.' . $field['type']))) {
-                $func = config('crud.fields.adaptForDatabase.' . $field['type']);
+            } elseif (is_callable($func)) {
                 $fields[$key] = $func($fields[$key]);
             }
         }
