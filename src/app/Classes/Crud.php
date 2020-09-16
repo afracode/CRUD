@@ -21,6 +21,7 @@ class Crud
     public $query;
     private $reserved_field_key;
     private $actions;
+    private $loaded_fields = [];
 
     public function __construct()
     {
@@ -375,6 +376,15 @@ class Crud
     {
         $inputs = $request->only($this->getFields('name'));
         return $this->checkInputsBeforeSet($inputs);
+    }
+
+
+    public function notLoaded($field)
+    {
+        if (!in_array($field['type'], $this->loaded_fields)) {
+            array_push($this->loaded_fields, $field['type']);
+            return true;
+        }
     }
 
 }

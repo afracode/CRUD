@@ -21,13 +21,16 @@
     @endif
 </select>
 
-@push('fields_scripts')
-    <script>
-        $(document).ready(function () {
-            $('.select2-basic-single').select2();
-        });
-    </script>
-@endpush
+
+@if ($crud->notLoaded($field))
+    @push('fields_scripts')
+        <script>
+            $(document).ready(function () {
+                $('.select2-basic-single').select2();
+            });
+        </script>
+    @endpush
+@endif
 
 
 

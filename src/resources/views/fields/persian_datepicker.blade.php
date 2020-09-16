@@ -7,9 +7,15 @@
 <input type="text" id="{{$field['name']}}" class="date-persian form-control pull-right">
 <input type="text" id="alt_{{$field['name']}}" name="{{$field['name']}}" hidden>
 
+
+
+
 @push('fields_scripts')
-    <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
-    <script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+    @if ($crud->notLoaded($field))
+        <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
+        <script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    @endif
 
     <script type="text/javascript">
         $("#{{$field['name']}}").persianDatepicker({
@@ -19,6 +25,5 @@
 
     </script>
 @endpush
-
 
 
