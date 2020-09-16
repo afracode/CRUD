@@ -13,3 +13,9 @@ Route::group(
             echo 'Hello from the afracode package!';
         });
     });
+
+
+
+Route::get('uploads/{file}', function ($file) {
+    return Storage::disk('public')->response('/uploads/'.$file);
+});
