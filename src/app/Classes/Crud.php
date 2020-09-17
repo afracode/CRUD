@@ -46,6 +46,8 @@ class Crud
             return '/' . $entities . '/datatable/';
         elseif ($route == 'deleteMedia')
             return '/' . $entities . '/' . $id . '/media';
+        elseif ($route == 'storeMedia')
+            return route('crud.storeMedia');
     }
 
 
@@ -362,9 +364,9 @@ class Crud
 
             if (isset($field['adaptForDatabase'])) {
                 $func = $field['adaptForDatabase'];
-                $fields[$key] = $func($fields[$key]);
+                $fields[$key] = $func($fields[$key] , $this);
             } elseif (is_callable($func)) {
-                $fields[$key] = $func($fields[$key]);
+                $fields[$key] = $func($fields[$key] , $this);
             }
         }
 

@@ -19,3 +19,7 @@ Route::group(
 Route::get('uploads/{file}', function ($file) {
     return Storage::disk('public')->response('/uploads/'.$file);
 });
+
+
+Route::post('crud/storeMedia', 'Afracode\CRUD\App\Controllers\CrudController@storeMedia')->name('crud.storeMedia');
+Route::get('crud/deleteMedia/{fileName}', 'Afracode\CRUD\App\Controllers\CrudController@deleteMedia')->name('crud.deleteMedia');

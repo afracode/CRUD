@@ -10,7 +10,6 @@
                   "type" => $media->type,
               ]);
   }
-
 @endphp
 
 
@@ -25,10 +24,12 @@
         <script src="/js/dropzone.min.js"></script>
 
 
+
+
         <script>
             let uploadedMediableMap = {}
             Dropzone.options.mediableDropzone = {
-                url: '{{$crud->route('storeMedia')}}',
+                url: '{{ route('crud.storeMedia') }}',
                 maxFilesize: 2, // MB
                 addRemoveLinks: true,
                 headers: {
@@ -40,12 +41,17 @@
                 },
                 removedfile: function (file) {
 
-                    $.ajax('{{$crud->route('deleteMedia')}}' + file.name, {
-                        type: 'Delete',
-                        headers: {
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                    });
+
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            alert("{{trans('message.deleted')}}")
+                        }
+                    };
+                    xhttp.open("GET", '/crud/deleteMedia/' + file.name, true);
+                    xhttp.send();
+
+
 
                     console.log(file)
                     file.previewElement.remove()
@@ -115,6 +121,7 @@
                 $('#mediable-dropzone').append(div);
             }
         </script>
+
 
     @endpush
 
