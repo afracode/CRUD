@@ -98,7 +98,7 @@ class CrudController extends Controller
     }
 
 
-    public function storeMedia1(Request $request)
+    public function storeMedia(Request $request)
     {
         $path = $this->crud->tmpPath;
 
@@ -191,11 +191,15 @@ class CrudController extends Controller
 
     public function update(Request $request, $id)
     {
+
+
         $this->crud->setRow($id);
         $this->setupEdit();
 
 
         $this->validate($request, array_merge($this->crud->getValidations()));
+
+//        dd($request->all());
 
         $input =  $fields = $this->crud->getFormInputs($request);
 
@@ -220,6 +224,7 @@ class CrudController extends Controller
         $input = $request->all();
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
+
         } else {
             $input = $request->except(['password']);
         }
@@ -262,7 +267,7 @@ class CrudController extends Controller
 
         foreach ($request->input('mediable', []) as $file) {
 
-            $new->addMedia(storage_path($path . $file))->toMediaCollection();
+            $new->addMedia(storage_path('tmp/' . $file))->toMediaCollection();
         }
 
         return redirect($this->crud->route('index'));

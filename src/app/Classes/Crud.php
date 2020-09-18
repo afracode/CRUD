@@ -215,7 +215,7 @@ class Crud
             $this->fields[$key]['value'] = $this->row->$name ?? null;
 
 
-            $func = config("crud.fields." . $this->fields[$key]['type'] . ".adaptDefault");
+            $func = config("crud.fields." . $this->fields[$key]['type'] . ".beforeGet");
 
 
             if (is_callable($func))
@@ -356,27 +356,40 @@ class Crud
     }
 
 
-    public function checkInputsBeforeSet($fields)
+    public function checkInputsBeforeSet($inputs)
     {
         foreach ($this->getFields() as $field) {
             $key = $field['name'];
-            $func = config("crud.fields." . $field['type'] . ".adaptForDatabase");
+            $func = config("crud.fields." . $field['type'] . ".beforeSet");
 
-            if (isset($field['adaptForDatabase'])) {
-                $func = $field['adaptForDatabase'];
-                $fields[$key] = $func($fields[$key] , $this);
+            if (isset($field['beforeSet'])) {
+                $func = $field['beforeSet'];
+                $inputs[$key] = $func($this->createKeyValue($key, $inputs[$key]));
             } elseif (is_callable($func)) {
-                $fields[$key] = $func($fields[$key] , $this);
+                $inputs[$key] = $func($this->createKeyValue($key, $inputs[$key]), $this);
             }
         }
 
-        return $fields;
+        return $inputs;
+    }
+
+    public function createKeyValue($key , $value)
+    {
+        $obj = new \stdClass();
+
+        $obj->key = $key;
+        $obj->value = $value;
+
+
+        return $obj;
+
     }
 
 
     public function getFormInputs($request)
     {
         $inputs = $request->only($this->getFields('name'));
+
         return $this->checkInputsBeforeSet($inputs);
     }
 
