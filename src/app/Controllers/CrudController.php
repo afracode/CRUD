@@ -259,9 +259,9 @@ class CrudController extends Controller
         $new = $this->crud->model::create($fields);
 
 
-        if ($this->crud->hasTrait('HasRoles')) {
-            $this->crud->row->assignRole($request->input('roles'));
-            $this->crud->row->givePermissionTo($request->input('permissions'));
+        if ($request->input('roles') && $this->crud->hasTrait('HasRoles')) {
+            $new->assignRole($request->input('roles'));
+            $new->givePermissionTo($request->input('permissions'));
         }
 
 
