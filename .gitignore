@@ -1,2 +1,4 @@
 /.idea/
 /src/resources/views/fields/inc/
+/src/public/crud/
+/node_modules/
