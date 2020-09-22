@@ -18,7 +18,10 @@
                                     @foreach ($crud->getFields() as $field)
                                         <div class="col-xs-12 col-sm-12 col-md-12">
                                             <div class="form-group">
-                                                <strong>{{$field['label']}}: {!! crudFieldRequired($field) !!}</strong>
+                                                @if($field['type'] <> 'hidden')
+                                                    <strong>{{$field['label']}}
+                                                        : {!! crudFieldRequired($field) !!}</strong>
+                                                @endif
                                                 @include('crud::fields.'.$field['type'], ['field' => $field , 'class' => 'form-control'])
                                             </div>
                                         </div>
