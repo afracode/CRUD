@@ -5,6 +5,7 @@ namespace Afracode\CRUD\App\Controllers;
 
 
 use Afracode\CRUD\app\Classes\Crud;
+use App\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -211,11 +213,12 @@ class CrudController extends Controller
         }
 
         $this->crud->row->update($input);
-        DB::table('model_has_roles')->where('model_id', $id)->delete();
-        DB::table('model_has_permissions')->where('model_id', $id)->delete();
+
 
 
         if ($this->crud->hasTrait('HasRoles')) {
+            DB::table('model_has_roles')->where('model_id', $id)->delete();
+            DB::table('model_has_permissions')->where('model_id', $id)->delete();
             $this->crud->row->assignRole($request->input('roles'));
             $this->crud->row->givePermissionTo($request->input('permissions'));
         }
