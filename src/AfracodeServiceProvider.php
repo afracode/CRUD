@@ -4,6 +4,7 @@ namespace Afracode\CRUD;
 
 use Afracode\CRUD\app\Controller\Crud\MenuController;
 use Afracode\CRUD\App\Controllers\CrudController;
+use Afracode\CRUD\App\View\Components\Menu;
 use Afracode\CRUD\Overrides\ResourceRegistrar;
 use Illuminate\Support\ServiceProvider;
 
@@ -48,6 +49,11 @@ class AfracodeServiceProvider extends ServiceProvider
 
 
         $this->publishFiles();
+
+
+        $this->loadViewComponentsAs('crud', [
+            Menu::class,
+        ]);
 
     }
 

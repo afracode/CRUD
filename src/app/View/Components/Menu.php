@@ -23,7 +23,7 @@ class Menu extends Component
 
     public function render()
     {
-        return view('components.' . $this->view);
+        return view(crudView('components.' . $this->view));
     }
 
 
