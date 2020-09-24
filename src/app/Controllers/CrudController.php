@@ -169,6 +169,7 @@ class CrudController extends Controller
 
     }
 
+
     public function dataTable()
     {
         $this->setupIndex();
@@ -178,6 +179,12 @@ class CrudController extends Controller
             ->addColumn('action', function ($row) {
                 return view('crud::partials.actions', ['id' => $row->id, 'crud' => $this->crud]);
             })->rawColumns(['action']);
+
+
+        foreach ($this->crud->filters as $filter) {
+            if ($filter['func'])
+                $datatable = $datatable->filterColumn($filter['name'], $filter['func']);
+        }
 
 
         foreach ($this->crud->columns as $column) {
@@ -201,9 +208,7 @@ class CrudController extends Controller
 
         $this->validate($request, array_merge($this->crud->getValidations()));
 
-//        dd($request->all());
-
-        $input =  $fields = $this->crud->getFormInputs($request);
+        $input = $fields = $this->crud->getFormInputs($request);
 
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
@@ -213,7 +218,6 @@ class CrudController extends Controller
         }
 
         $this->crud->row->update($input);
-
 
 
         if ($this->crud->hasTrait('HasRoles')) {
@@ -257,7 +261,7 @@ class CrudController extends Controller
 
         $this->validate($request, $this->crud->getValidations());
 
-        $fields =  $fields = $this->crud->getFormInputs($request);
+        $fields = $fields = $this->crud->getFormInputs($request);
 
         $new = $this->crud->model::create($fields);
 

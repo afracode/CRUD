@@ -14,6 +14,7 @@ class Crud
     public $model;
     public $entities;
     public $columns = [];
+    public $filters = [];
     public $fields = [];
     public $object;
     public $tmpPath;
@@ -113,6 +114,23 @@ class Crud
 
         return $this;
     }
+
+
+
+    public function addFilter($name , $func)
+    {
+
+        array_push($this->filters,
+            [
+                'name' => $name ,
+                'func' => $func ,
+            ]
+        );
+
+        return $this;
+    }
+
+
 
 
     public function setColumn($data, $title = null, $orderable = null, $searchable = null)
