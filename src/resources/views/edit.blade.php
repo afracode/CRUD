@@ -22,7 +22,7 @@
                                                     <strong>{{$field['label']}}
                                                         : {!! crudFieldRequired($field) !!}</strong>
                                                 @endif
-                                                @include('crud::fields.'.$field['type'], ['field' => $field , 'class' => 'form-control'])
+                                                @include(crudView('fields.'.$field['type']), ['field' => $field , 'class' => 'form-control'])
                                             </div>
                                         </div>
                                     @endforeach
