@@ -4,7 +4,7 @@ if (! function_exists('crudView')) {
     function crudView($view)
     {
         $originalTheme = 'crud::';
-        $theme = config('crud.view_namespace');
+        $theme = config('crud.base.view_namespace');
 
 
 
@@ -28,7 +28,7 @@ if (!function_exists('crudRequired')) {
     function crudFieldRequired($field)
     {
         if (isset($field['validation']) && (strpos($field['validation'],'required') !== false))
-            return config('crud.field_required_span');
+            return config('crud.base.field_required_span');
     }
 }
 
@@ -71,5 +71,19 @@ if (!function_exists('numberFormatPrecision')) {
             $response .= substr($numberParts[1], 0, $precision);
         }
         return $response;
+    }
+}
+
+
+
+if (!function_exists('queryAdaptToSelect')) {
+    function queryAdaptToSelect($query , $attribute , $key = 'id') {
+
+        $result = [];
+
+        foreach($query as $row)
+            $result[$row->{$key}] = $row->{$attribute};
+
+        return $result;
     }
 }
