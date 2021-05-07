@@ -84,9 +84,9 @@
     @yield('style')
 </head>
 <body class="c-app">
-@include('crud.partials.sidebar')
+@include(crudView('partials.sidebar'))
 <div class="c-wrapper c-fixed-components">
-    @include('crud.partials.header')
+    @include(crudView('partials.header'))
     <div class="c-body">
         <main class="c-main">
             <div class="container-fluid">

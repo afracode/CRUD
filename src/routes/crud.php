@@ -5,8 +5,8 @@
 Route::group(
     [
         'namespace' => 'Afracode\CRUD\app\Http\Controllers',
-        'middleware' => config('crud.middleware'),
-        'prefix'     => config('crud.prefix'),
+        'middleware' => config('crud.base.middleware'),
+        'prefix'     => config('crud.base.prefix'),
     ],
     function () {
         Route::get('/', function(){
