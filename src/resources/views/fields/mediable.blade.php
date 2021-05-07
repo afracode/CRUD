@@ -1,7 +1,7 @@
 @php
     $result = [];
       if($crud->row) {
-         $medias = $crud->row->media;
+         $medias = $crud->row->getMedia($field['name']);
           foreach ($medias as $media)
               $result[] = ([
                   "name" => $media->name,
@@ -10,11 +10,18 @@
                   "type" => $media->type,
               ]);
   }
+
+
+
+
+$id = 'mediable-'.$field['name'];
+$method = 'mediable'.ucfirst($field['name']);
+
 @endphp
 
 
 <div class="form-group">
-    <div class="needsclick dropzone" id="mediable-dropzone">
+    <div class="needsclick dropzone" id="{{$id}}">
     </div>
 </div>
 
@@ -23,66 +30,8 @@
 
         <script src="/js/dropzone.min.js"></script>
 
-
-
-
         <script>
             let uploadedMediableMap = {}
-            Dropzone.options.mediableDropzone = {
-                url: '{{ route('crud.storeMedia') }}',
-                maxFilesize: 2, // MB
-                addRemoveLinks: true,
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                success: function (file, response) {
-                    $('form').append('<input type="hidden" name="mediable[]" value="' + response.name + '">')
-                    uploadedMediableMap[file.name] = response.name
-                },
-                removedfile: function (file) {
-
-
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                        if (this.readyState == 4 && this.status == 200) {
-                            alert("{{trans('message.deleted')}}")
-                        }
-                    };
-                    xhttp.open("GET", '/crud/deleteMedia/' + file.name, true);
-                    xhttp.send();
-
-
-
-                    console.log(file)
-                    file.previewElement.remove()
-                    var name = ''
-                    if (typeof file.file_name !== 'undefined') {
-                        name = file.file_name
-                    } else {
-                        name = uploadedMediableMap[file.name]
-                    }
-                    $('form').find('input[name="mediable[]"][value="' + name + '"]').remove()
-                },
-                init: function () {
-                    let mockFile = '';
-
-
-                    @foreach($result as $media)
-                        mockFile = {!! json_encode($media) !!};
-
-                    if (mockFile.type == "video") {
-                        video(mockFile)
-                    } else {
-                        this.emit("addedfile", mockFile);
-                        this.emit("thumbnail", mockFile, mockFile.url);
-                        this.emit("complete", mockFile);
-                    }
-
-
-                    @endforeach
-                }
-            }
-
 
             function video(file) {
                 var src = file.url; ///video url not youtube or vimeo,just video on server
@@ -122,13 +71,10 @@
             }
         </script>
 
-
     @endpush
 
     @push('fields_css')
         <link href="/js/dropzone.min.css" rel="stylesheet">
-
-
         <style>
             .wrap-video {
                 display: inline-block;
@@ -154,3 +100,52 @@
     @endpush
 @endif
 
+
+@push('fields_scripts')
+    <script>
+        Dropzone.options['{{$method}}'] = {
+            url: '{{ route('crud.storeMedia') }}',
+            maxFilesize: 2, // MB
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            success: function (file, response) {
+                $('form').append('<input type="hidden" name="' + '{{$field['name']}}[]' + '" value="' + response.name + '">')
+                uploadedMediableMap[file.name] = response.name
+            },
+            removedfile: function (file) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        alert("{{trans('message.deleted')}}")
+                    }
+                };
+                xhttp.open("GET", '/crud/deleteMedia/' + file.name, true);
+                xhttp.send();
+                file.previewElement.remove()
+                var name = ''
+                if (typeof file.file_name !== 'undefined') {
+                    name = file.file_name
+                } else {
+                    name = uploadedMediableMap[file.name]
+                }
+                $('form').find('input[name="' + '{{$field['name']}}[]' + '"][value="' + name + '"]').remove()
+            },
+            init: function () {
+                let mockFile = '';
+                @foreach($result as $media)
+                    mockFile = {!! json_encode($media) !!};
+
+                if (mockFile.type == "video") {
+                    video(mockFile)
+                } else {
+                    this.emit("addedfile", mockFile);
+                    this.emit("thumbnail", mockFile, mockFile.url);
+                    this.emit("complete", mockFile);
+                }
+                @endforeach
+            }
+        }
+    </script>
+@endpush

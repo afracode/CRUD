@@ -208,7 +208,7 @@ class CrudController extends Controller
 
         $this->validate($request, array_merge($this->crud->getValidations()));
 
-        $input = $fields = $this->crud->getFormInputs($request);
+        $input  = $this->crud->getFormInputs($request);
 
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
@@ -237,16 +237,18 @@ class CrudController extends Controller
         }
 
 
-        if ($this->crud->hasTrait('InteractsWithMedia')) {
-            $media = $this->crud->row->getMedia('*')->pluck('file_name')->toArray();
 
-            foreach ($request->input('mediable', []) as $file) {
-                if (count($media) === 0 || !in_array($file, $media)) {
-                    $this->crud->row->addMedia(storage_path('tmp/' . $file))->toMediaCollection();
+        foreach ($this->crud->fields as $field){
+            if($field['type'] == 'mediable'){
+                $media = $this->crud->row->getMedia($field['name'])->pluck('file_name')->toArray();
+                foreach ($request->input($field['name'], []) as $file){
+                    if (count($media) === 0 || !in_array($file, $media)) {
+                        $this->crud->row->addMedia(storage_path('tmp/' . $file))
+                            ->toMediaCollection($field['name']);
+                    }
                 }
             }
         }
-
 
         return redirect()->back()->with('success', trans('message.updated'));
     }
@@ -259,9 +261,19 @@ class CrudController extends Controller
 
         $this->setupCreate();
 
-        $this->validate($request, $this->crud->getValidations());
+//        $this->validate($request, $this->crud->getValidations());
 
-        $fields = $fields = $this->crud->getFormInputs($request);
+
+
+
+        $fields  = $this->crud->getFormInputs($request);
+
+
+
+
+
+
+
 
         $new = $this->crud->model::create($fields);
 
@@ -272,10 +284,14 @@ class CrudController extends Controller
         }
 
 
-        foreach ($request->input('mediable', []) as $file) {
 
-            $new->addMedia(storage_path('tmp/' . $file))->toMediaCollection();
-        }
+
+
+        foreach ($this->crud->fields as $field)
+            if($field['type'] == 'mediable')
+                foreach ($request->input($field['name'], []) as $file)
+                    $new->addMedia(storage_path('tmp/' . $file))->toMediaCollection($field['name']);
+
 
         return redirect($this->crud->route('index'));
     }
@@ -310,6 +326,8 @@ class CrudController extends Controller
             ]
         );
     }
+
+
 
 
 }
