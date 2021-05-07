@@ -19,6 +19,7 @@ class Crud
     public $object;
     public $tmpPath;
     public $row;
+    public $inputs = [];
     public $query;
     private $reserved_field_key;
     private $actions;
@@ -116,14 +117,13 @@ class Crud
     }
 
 
-
-    public function addFilter($name , $func)
+    public function addFilter($name, $func)
     {
 
         array_push($this->filters,
             [
-                'name' => $name ,
-                'func' => $func ,
+                'name' => $name,
+                'func' => $func,
             ]
         );
 
@@ -187,6 +187,18 @@ class Crud
             $this->fields[$this->reserved_field_key] = $field;
         else
             array_push($this->fields, $field);
+
+        return $this;
+    }
+
+
+    public function setSecureField($field)
+    {
+        $secureField = [
+            $field['key'] => $field['value']
+        ];
+
+        $this->inputs = array_merge($this->inputs, $secureField);
 
         return $this;
     }
@@ -388,10 +400,13 @@ class Crud
             }
         }
 
-        return $inputs;
+
+
+        $this->inputs = array_merge($this->inputs, $inputs);
+
     }
 
-    public function createKeyValue($key , $value)
+    public function createKeyValue($key, $value)
     {
         $obj = new \stdClass();
 
@@ -408,7 +423,10 @@ class Crud
     {
         $inputs = $request->only($this->getFields('name'));
 
-        return $this->checkInputsBeforeSet($inputs);
+
+        $this->checkInputsBeforeSet($inputs);
+
+        return $this->inputs;
     }
 
 
