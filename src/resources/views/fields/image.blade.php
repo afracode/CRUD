@@ -67,20 +67,15 @@
     <button class="btn btn-light btn-sm" data-handle="remove" type="button"><i class="la la-trash"></i></button>
 </div>
 
-{{-- HINT --}}
+
 @if (isset($field['hint']))
     <p class="help-block">{!! $field['hint'] !!}</p>
 @endif
-@include('crud::fields.inc.wrapper_end')
 
 
-{{-- ########################################## --}}
-{{-- Extra CSS and JS for this particular field --}}
-{{-- If a field type is shown multiple times on a form, the CSS and JS will only be loaded once --}}
+
+
 @if (true)
-
-
-    {{-- FIELD CSS - will be loaded in the after_styles section --}}
     @push('fields_css')
 
         <link rel="stylesheet" type="text/css"
@@ -152,8 +147,6 @@
             }
         </style>
     @endpush
-
-    {{-- FIELD JS - will be loaded in the after_scripts section --}}
     @push('fields_scripts')
 
 
@@ -374,5 +367,4 @@
 
     @endpush
 @endif
-{{-- End of Extra CSS and JS --}}
-{{-- ########################################## --}}
+

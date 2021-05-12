@@ -328,6 +328,15 @@ class Crud
     }
 
 
+    public function getFieldValue($name)
+    {
+        foreach ($this->getFields() as $field) {
+            if($field['name'] == $name)
+                return $field;
+        }
+    }
+
+
     public function checkRelationField($field)
     {
 
