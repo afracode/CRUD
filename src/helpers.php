@@ -40,7 +40,7 @@ if (!function_exists('menuName')) {
         $name .= '.';
         $name .= $menu->href;
 
-        return trans($name);
+        return trans('crud.'.$name);
 
     }
 }
@@ -49,7 +49,7 @@ if (!function_exists('menuName')) {
 if (!function_exists('crudShowLabel')) {
     function crudShowLabel($field)
     {
-        $trans = 'db.';
+        $trans = 'crud.db.';
         $trans .= $field['name'];
         $value = "<strong>";
         $value .= trans($trans);

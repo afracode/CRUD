@@ -38,8 +38,8 @@
 
                         <tr>
                             <td>
-                                <a href="/{{$crud->entities}}" class="btn btn-success">نمایش همه</a>
-                                <a href="/{{$crud->entities}}/{{$crud->row->id}}/edit"
+                                <a href="{{$crud->route('index' )}}" class="btn btn-success">نمایش همه</a>
+                                <a href="{{$crud->route('edit' , $crud->row->id)}}"
                                    class="btn btn-primary">ویرایش</a>
 
                             </td>

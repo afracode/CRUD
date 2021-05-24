@@ -36,18 +36,21 @@ class Crud
     {
         $entities = $this->entities;
 
+
+        $prefix = '/' . config('crud.base.prefix') . '/';
+
         if (in_array($route, ['update', 'show', 'delete']))
-            return '/' . $entities . '/' . $id;
+            return $prefix . $entities . '/' . $id;
         elseif ($route == 'edit')
-            return '/' . $entities . '/' . $id . '/edit';
+            return $prefix . $entities . '/' . $id . '/edit';
         elseif ($route == 'create')
-            return '/' . $entities . '/create';
+            return $prefix . $entities . '/create';
         elseif (in_array($route, ['index', 'store']))
-            return '/' . $entities;
+            return $prefix . $entities;
         elseif ($route == 'datatable')
-            return '/' . $entities . '/datatable/';
+            return $prefix  . 'datatable/' . $entities;
         elseif ($route == 'deleteMedia')
-            return '/' . $entities . '/' . $id . '/media';
+            return $prefix . $entities . '/' . $id . '/media';
         elseif ($route == 'storeMedia')
             return route('crud.storeMedia');
     }
@@ -131,14 +134,12 @@ class Crud
     }
 
 
-
-
     public function setColumn($data, $title = null, $orderable = null, $searchable = null)
     {
         array_push($this->columns,
             [
                 'data' => $data,
-                'name' => $title ?? ((stripos(trans('db.' . $data), "db.") === false) ? trans('db.' . $data) : ucfirst($data)),
+                'name' => $title ?? trans('crud.db.' . $data),
                 'orderable' => $orderable ?? 1,
                 'searchable' => $searchable ?? 1,
                 'change_to' => null,
@@ -209,7 +210,7 @@ class Crud
 
         $field['name'] = isset($field['name']) ? $field['name'] : $field['method'];
 
-        $field['label'] = $field['label'] ?? ((stripos(trans('db.' . $field['name']), "db.") === false) ? trans('db.' . $field['name']) : ucfirst($field['name']));
+        $field['label'] = $field['label'] ?? trans('crud.db.' . $field['name']);
 
         return $field;
     }
@@ -331,7 +332,7 @@ class Crud
     public function getFieldValue($name)
     {
         foreach ($this->getFields() as $field) {
-            if($field['name'] == $name)
+            if ($field['name'] == $name)
                 return $field;
         }
     }
@@ -408,7 +409,6 @@ class Crud
                 $inputs[$key] = $func($this->createKeyValue($key, $inputs[$key]), $this);
             }
         }
-
 
 
         $this->inputs = array_merge($this->inputs, $inputs);
