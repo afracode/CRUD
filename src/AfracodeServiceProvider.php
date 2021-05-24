@@ -6,6 +6,7 @@ use Afracode\CRUD\app\Controller\Crud\MenuController;
 use Afracode\CRUD\App\Controllers\CrudController;
 use Afracode\CRUD\App\View\Components\Menu;
 use Afracode\CRUD\Overrides\ResourceRegistrar;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,8 +15,8 @@ class AfracodeServiceProvider extends ServiceProvider
 
     public function register()
     {
-        if (! Route::hasMacro('crud')) {
-            $this->addCrudRoute();
+        if (!Route::hasMacro('crud')) {
+            $this->addRouteMacro();
         }
     }
 
@@ -52,11 +53,11 @@ class AfracodeServiceProvider extends ServiceProvider
     {
 
         $this->publishes([
-            __DIR__.'/config/' => config_path('crud'),
+            __DIR__ . '/config/' => config_path('crud'),
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/database/migrations/' => database_path('migrations'),
+            __DIR__ . '/database/migrations/' => database_path('migrations'),
         ], 'migration');
     }
 
@@ -98,6 +99,16 @@ class AfracodeServiceProvider extends ServiceProvider
         $this->loadViewComponentsAs('crud', [
             Menu::class,
         ]);
+    }
+
+
+    private function addRouteMacro()
+    {
+
+        Route::macro('crud', function ($name, $controller) {
+            Route::resource($name, $controller)->shallow();
+            Route::any('/datatable/' . $name, [$controller, 'dataTable'])->name('datatable');
+        });
     }
 
 
