@@ -10,10 +10,6 @@
                   "type" => $media->type,
               ]);
   }
-
-
-
-
 $id = 'mediable-'.$field['name'];
 $method = 'mediable'.ucfirst($field['name']);
 
@@ -25,49 +21,91 @@ $method = 'mediable'.ucfirst($field['name']);
     </div>
 </div>
 
+
+
 @if ($crud->notLoaded($field))
     @push('fields_scripts')
 
         <script src="/js/dropzone.min.js"></script>
 
         <script>
+
+            let removeMedia = function (file) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        alert("{{trans('message.deleted')}}")
+                    }
+                };
+                xhttp.open("GET", '/crud/deleteMedia/' + file.name, true);
+                xhttp.send();
+                file.previewElement.remove()
+                var name = ''
+                if (typeof file.file_name !== 'undefined') {
+                    name = file.file_name
+                } else {
+                    name = uploadedMediableMap[file.name]
+                }
+                $('form').find('input[name="' + '{{$field['name']}}[]' + '"][value="' + name + '"]').remove()
+            };
+
+
             let uploadedMediableMap = {}
 
-            function video(file) {
+
+
+
+
+
+            function video(file, fieldName) {
+                // var html;
                 var src = file.url; ///video url not youtube or vimeo,just video on server
                 var video = document.createElement('video');
                 video.src = src;
-
                 video.width = 120;
-                video.height = 106;
+                // video.height = 120;
 
-                var canvas = document.createElement('canvas');
-                canvas.width = 360;
-                canvas.height = 240;
-                var context = canvas.getContext('2d');
+                // var canvas = document.createElement('canvas');
+                // canvas.width = 360;
+                // canvas.height = 240;
+                // var context = canvas.getContext('2d');
 
-                video.addEventListener('loadeddata', function () {
-                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    var dataURI = canvas.toDataURL('image/jpeg');
-                    html += '<figure>';
-                    html += '<img src="' + dataURI + '' + '" alt="' + item.description + '" />';
-                    html += '<figurecaption>' + item.description + '</figurecaption>'
-                    html += '</figure>';
-                });
+                // video.addEventListener('loadeddata', function () {
+                //     context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                //     var dataURI = canvas.toDataURL('image/jpeg');
+                //     html += '<figure>';
+                //     html += '<img src="' + dataURI + '' + '" alt="' + 'salam' + '" />';
+                //     html += '<figurecaption>' + 'salam' + '</figurecaption>'
+                //     html += '</figure>';
+                // });
 
-                let icon = document.createElement('span');
-                icon.setAttribute('class', 'video-icon');
-                icon.innerHTML = "video"
+                let div_preview = document.createElement('div');
+                div_preview.setAttribute('class', 'dz-preview dz-complete dz-image-preview');
+                let div_remove = document.createElement('div');
+                div_remove.setAttribute('class', 'dz-remove');
+                let a_remove = document.createElement('a');
+                a_remove.onclick = function (){
+                    removeMedia(file);
+                };
+                a_remove.innerHTML = "Remove file"
+                div_remove.appendChild(a_remove)
+
+                let div_video = document.createElement('div');
+                let icon = document.createElement('a');
+                icon.href = file.url;
+                icon.setAttribute('class', 'video-icon ');
+                icon.innerHTML = "play"
                 let div = document.createElement('div');
-                div.setAttribute('class', 'wrap-video');
+                div.setAttribute('class', 'wrap-video ');
                 div.appendChild(video);
                 div.appendChild(icon);
+                div_preview.appendChild(div);
+                div_preview.appendChild(div_remove);
 
 
-                console.log(div)
-                console.log(div)
 
-                $('#mediable-dropzone').append(div);
+
+                $("#mediable-" + fieldName).append(div_preview);
             }
         </script>
 
@@ -85,17 +123,29 @@ $method = 'mediable'.ucfirst($field['name']);
 
             .video-icon {
                 background: red;
-                padding: 2px 4px;
+                padding: 12px 9px !important;
                 border-radius: 4px;
-                text-align: center;
+                text-removeMediagn: center;
                 color: white;
                 background: #333;
-                opacity: .4;
+                opacity: .8 !important;
                 position: absolute;
                 left: 38px;
-                top: 45px;
+                top: 35px;
                 font-size: 12px;
+                cursor: pointer !important;
             }
+
+            .wrap-video {
+                background: black;
+                border-radius: 20px;
+                overflow: hidden;
+                width: 120px;
+                height: 120px;
+                position: relative;
+            }
+
+
         </style>
     @endpush
 @endif
@@ -114,31 +164,14 @@ $method = 'mediable'.ucfirst($field['name']);
                 $('form').append('<input type="hidden" name="' + '{{$field['name']}}[]' + '" value="' + response.name + '">')
                 uploadedMediableMap[file.name] = response.name
             },
-            removedfile: function (file) {
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        alert("{{trans('message.deleted')}}")
-                    }
-                };
-                xhttp.open("GET", '/crud/deleteMedia/' + file.name, true);
-                xhttp.send();
-                file.previewElement.remove()
-                var name = ''
-                if (typeof file.file_name !== 'undefined') {
-                    name = file.file_name
-                } else {
-                    name = uploadedMediableMap[file.name]
-                }
-                $('form').find('input[name="' + '{{$field['name']}}[]' + '"][value="' + name + '"]').remove()
-            },
+            removedfile: removeMedia,
             init: function () {
                 let mockFile = '';
                 @foreach($result as $media)
                     mockFile = {!! json_encode($media) !!};
 
                 if (mockFile.type == "video") {
-                    video(mockFile)
+                    video(mockFile , "{{$field['name']}}")
                 } else {
                     this.emit("addedfile", mockFile);
                     this.emit("thumbnail", mockFile, mockFile.url);
