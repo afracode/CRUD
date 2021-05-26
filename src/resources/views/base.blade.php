@@ -53,6 +53,7 @@
     </script>
     <link href="/crud/vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
     <link href="https://unpkg.com/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/@coreui/icons@2.0.0-beta.3/css/all.min.css">
 
 
     <style>
