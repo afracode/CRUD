@@ -313,8 +313,9 @@ class Crud
     {
         if ($key) {
             $values = [];
-            for ($i = 0; $i < count($this->fields); $i++)
-                $values[] = $this->checkRelationField($this->fields[$i])[$key] ?? '';
+            foreach ($this->fields as $field) {
+                $values[] = $this->checkRelationField($field)[$key] ?? '';
+            }
             return $values;
         }
 
