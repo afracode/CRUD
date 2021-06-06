@@ -38,10 +38,12 @@
 
                         <tr>
                             <td>
-                                <a href="{{$crud->route('index' )}}" class="btn btn-success">نمایش همه</a>
-                                <a href="{{$crud->route('edit' , $crud->row->id)}}"
-                                   class="btn btn-primary">ویرایش</a>
-
+                                <a href="{{$crud->route('index' )}}"
+                                   class="btn btn-success">{{trans('crud.buttons.index')}}</a>
+                                @can($crud->permission('update'))
+                                    <a href="{{$crud->route('edit' , $crud->row->id)}}"
+                                       class="btn btn-primary">{{trans('crud.buttons.edit')}}</a>
+                                @endcan
                             </td>
                         </tr>
                         </tbody>
