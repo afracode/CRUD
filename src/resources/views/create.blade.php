@@ -15,6 +15,13 @@
                                 @csrf
                                 <div class="row">
                                     @foreach ($crud->getFields() as $field)
+                                        @if(isset($field['roles_can_see']))
+                                            @hasrole($field['roles_can_see'])
+
+                                            @else
+                                            <?php continue; ?>
+                                            @endhasrole
+                                        @endif
                                         <div class="col-xs-12 col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 @if($field['type'] <> 'hidden')
