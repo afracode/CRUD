@@ -16,22 +16,29 @@
                                 @method('PUT')
                                 <div class="row">
                                     @foreach ($crud->getFields() as $field)
-                                        <div class="col-xs-12 col-sm-12 col-md-12">
-                                            <div class="form-group">
-                                                @if($field['type'] <> 'hidden')
-                                                    <strong>{{$field['label']}}
-                                                        : {!! crudFieldRequired($field) !!}</strong>
-                                                @endif
-                                                @include(crudView('fields.'.$field['type']), ['field' => $field , 'class' => 'form-control'])
+                                        @if(isset($field['permission_field']))
+                                            @can($field['permission_field'])
+
+                                            @else
+                                                <?php continue; ?>
+                                            @endcan
+                                        @endif
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="form-group">
+                                                    @if($field['type'] <> 'hidden')
+                                                        <strong>{{$field['label']}}
+                                                            : {!! crudFieldRequired($field) !!}</strong>
+                                                    @endif
+                                                    @include(crudView('fields.'.$field['type']), ['field' => $field , 'class' => 'form-control'])
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                                        <button class="btn btn-block btn-success"
-                                                type="submit">{{trans('crud.save')}}</button>
-                                        <a href="{{ $crud->route('index') }}"
-                                           class="btn btn-block btn-primary">{{trans('crud.return')}}</a>
-                                    </div>
+                                            @endforeach
+                                            <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                                                <button class="btn btn-block btn-success"
+                                                        type="submit">{{trans('crud.save')}}</button>
+                                                <a href="{{ $crud->route('index') }}"
+                                                   class="btn btn-block btn-primary">{{trans('crud.return')}}</a>
+                                            </div>
                                 </div>
                             </form>
                         </div>
