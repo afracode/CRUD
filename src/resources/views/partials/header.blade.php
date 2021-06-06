@@ -20,13 +20,13 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right pt-0">
                 <div class="dropdown-header bg-light py-2"><strong>پنل کاربری</strong></div>
-                <a class="dropdown-item" href="/admin/users/admin/edit">
+                <a class="dropdown-item" href="/admin/profile">
                     <svg class="c-icon mr-2">
                         <use xlink:href=""></use>
                     </svg>
                     پروفایل</a>
 
-                <a class="dropdown-item" href="/admin/users/current/password">
+                <a class="dropdown-item" href="/admin/change-password">
                     <svg class="c-icon mr-2">
                         <use xlink:href=""></use>
                     </svg>

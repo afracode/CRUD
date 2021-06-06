@@ -77,7 +77,8 @@ if (!function_exists('numberFormatPrecision')) {
 
 
 if (!function_exists('queryAdaptToSelect')) {
-    function queryAdaptToSelect($query , $attribute , $key = 'id') {
+    function queryAdaptToSelect($query , $attribute , $key = 'id'): array
+    {
 
         $result = [];
 
