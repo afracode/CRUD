@@ -1,21 +1,25 @@
 <?php
 
-if (! function_exists('crudView')) {
-    function crudView($view)
+if (!function_exists('crudView')) {
+    function crudView($view, $crud = null)
     {
         $originalTheme = 'crud::';
         $theme = config('crud.base.view_namespace');
-
 
 
         if (is_null($theme)) {
             $theme = $originalTheme;
         }
 
-        $returnView = $theme.$view;
+        $returnView = $theme . $view;
 
-        if (! view()->exists($returnView)) {
-            $returnView = $originalTheme.$view;
+
+        if ($crud)
+            $returnView = config('crud.base.customized_views_path') . $crud->entities . '.' . $view;
+
+
+        if (!view()->exists($returnView)) {
+            $returnView = $originalTheme . $view;
         }
 
 
@@ -27,7 +31,7 @@ if (! function_exists('crudView')) {
 if (!function_exists('crudRequired')) {
     function crudFieldRequired($field)
     {
-        if (isset($field['validation']) && (strpos($field['validation'],'required') !== false))
+        if (isset($field['validation']) && (strpos($field['validation'], 'required') !== false))
             return config('crud.base.field_required_span');
     }
 }
@@ -40,7 +44,7 @@ if (!function_exists('menuName')) {
         $name .= '.';
         $name .= $menu->href;
 
-        return trans('crud.'.$name);
+        return trans('crud.' . $name);
 
     }
 }
@@ -66,7 +70,7 @@ if (!function_exists('numberFormatPrecision')) {
     {
         $numberParts = explode($separator, $number);
         $response = $numberParts[0];
-        if (count($numberParts)>1 && $precision > 0) {
+        if (count($numberParts) > 1 && $precision > 0) {
             $response .= $separator;
             $response .= substr($numberParts[1], 0, $precision);
         }
@@ -75,14 +79,13 @@ if (!function_exists('numberFormatPrecision')) {
 }
 
 
-
 if (!function_exists('queryAdaptToSelect')) {
-    function queryAdaptToSelect($query , $attribute , $key = 'id'): array
+    function queryAdaptToSelect($query, $attribute, $key = 'id'): array
     {
 
         $result = [];
 
-        foreach($query as $row)
+        foreach ($query as $row)
             $result[$row->{$key}] = $row->{$attribute};
 
         return $result;

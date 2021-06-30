@@ -76,7 +76,7 @@ class CrudController extends Controller
         $this->crud->resetFields();
         $this->setupCreate();
 
-        return view(crudView('create'),
+        return view(crudView('create' , $this->crud),
             [
                 'crud' => $this->crud
             ]
