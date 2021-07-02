@@ -4,13 +4,13 @@
 
 Route::group(
     [
-        'namespace' => 'Afracode\CRUD\app\Http\Controllers',
+        'namespace' => 'Afranext\Crud\app\Http\Controllers',
         'middleware' => config('crud.base.middleware'),
         'prefix'     => config('crud.base.prefix'),
     ],
     function () {
         Route::get('/', function(){
-            echo 'Hello from the afracode package!';
+            echo 'Hello from the afranext package!';
         });
     });
 
@@ -21,5 +21,5 @@ Route::get('uploads/{file}', function ($file) {
 });
 
 
-Route::post('crud/storeMedia', 'Afracode\CRUD\App\Controllers\CrudController@storeMedia')->name('crud.storeMedia');
-Route::get('crud/deleteMedia/{fileName}', 'Afracode\CRUD\App\Controllers\CrudController@deleteMedia')->name('crud.deleteMedia');
+Route::post('crud/storeMedia', 'Afranext\Crud\App\Controllers\CrudController@storeMedia')->name('crud.storeMedia');
+Route::get('crud/deleteMedia/{fileName}', 'Afranext\Crud\App\Controllers\CrudController@deleteMedia')->name('crud.deleteMedia');

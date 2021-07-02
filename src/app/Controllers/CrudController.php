@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Afracode\CRUD\App\Controllers;
+namespace Afranext\Crud\App\Controllers;
 
 
-use Afracode\CRUD\app\Classes\Crud;
+use Afranext\Crud\app\Classes\Crud;
 use App\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

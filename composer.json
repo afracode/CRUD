@@ -1,29 +1,28 @@
 {
-    "name": "afracode/crud",
+    "name": "afranext/crud",
     "type": "library",
     "description": "Quickly build an admin panel",
     "keywords": [
-        "afracode",
+        "afranext",
         "admin panel for laravel",
         "bootstrap 4 admin panel laravel",
         "laravel admin",
-        "CRUD",
-        "BREAD",
+        "crud",
         "admin panel",
         "admin interface",
         "CMS",
         "content management system"
     ],
-    "homepage": "https://github.com/afracode/CRUD",
+    "homepage": "https://github.com/afranext/crud",
     "license": "proprietary",
     "authors": [
         {
             "name": "Ali Sharifi Neyestani",
-            "email": "ali@afracode.com"
+            "email": "ali@afranext.com"
         },
         {
             "name": "Kourosh Sharifi Neyestani",
-            "email": "kourosh@afracode.com"
+            "email": "kourosh@afranext.com"
         }
     ],
     "require": {
@@ -33,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Afracode\\CRUD\\": "src"
+            "Afranext\\Crud\\": "src"
         },
         "files": ["src/helpers.php"]
     }

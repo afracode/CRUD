@@ -1,6 +1,6 @@
 <?php
 
-namespace Afracode\CRUD\App\Models;
+namespace Afranext\Crud\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

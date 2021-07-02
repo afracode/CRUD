@@ -1,6 +1,6 @@
 <?php
 
-namespace Afracode\CRUD\App\View\Components;
+namespace Afranext\Crud\App\View\Components;
 
 
 use App\Helpers\Assoc;
@@ -15,7 +15,7 @@ class Menu extends Component
     public function __construct($group = 'main', $view)
     {
 
-        $this->items = \Afracode\CRUD\App\Models\Menu::where('group', $group)->get();
+        $this->items = \Afranext\Crud\App\Models\Menu::where('group', $group)->get();
 
         $this->view = $view;
     }

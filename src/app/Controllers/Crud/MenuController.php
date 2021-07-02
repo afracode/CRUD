@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Afracode\CRUD\app\Controller\Crud;
+namespace Afranext\Crud\app\Controller\Crud;
 
 
-use Afracode\CRUD\App\Classes\Crud;
-use Afracode\CRUD\App\Models\Menu;
+use Afranext\Crud\App\Classes\Crud;
+use Afranext\Crud\App\Models\Menu;
 
 class MenuController extends Crud
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Afracode\CRUD\Helpers;
+namespace Afranext\Crud\Helpers;
 
 
 class Obj

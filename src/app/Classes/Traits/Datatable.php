@@ -1,6 +1,6 @@
 <?php
 
-namespace Afracode\CRUD\App\Classes\Traits;
+namespace Afranext\Crud\App\Classes\Traits;
 
 trait Datatable
 {

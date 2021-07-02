@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Afracode\CRUD\App\Classes;
+namespace Afranext\Crud\App\Classes;
 
 
-use Afracode\CRUD\App\Classes\Traits\Datatable;
+use Afranext\Crud\App\Classes\Traits\Datatable;
 use Illuminate\Support\Arr;
 
 class Crud

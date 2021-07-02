@@ -1,16 +1,15 @@
 <?php
 
-namespace Afracode\CRUD;
+namespace Afranext\Crud;
 
-use Afracode\CRUD\app\Controller\Crud\MenuController;
-use Afracode\CRUD\App\Controllers\CrudController;
-use Afracode\CRUD\App\View\Components\Menu;
+use Afranext\Crud\app\Controller\Crud\MenuController;
+use Afranext\Crud\App\Controllers\CrudController;
+use Afranext\Crud\App\View\Components\Menu;
 use App\Http\Controllers\Crud\UserController;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
-class AfracodeServiceProvider extends ServiceProvider
+class NextCrudServiceProvider extends ServiceProvider
 {
 
     public function register()
@@ -44,7 +43,7 @@ class AfracodeServiceProvider extends ServiceProvider
     {
 
         $this->publishes([
-            __DIR__ . '/config/' => config_path('crud'),
+            __DIR__ . '/config/' => config_path(),
         ], 'config');
 
         $this->publishes([

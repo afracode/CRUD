@@ -1,6 +1,6 @@
 <?php
 
-namespace Afracode\CRUD\Overrides;
+namespace Afranext\Crud\Overrides;
 
 
 use Illuminate\Routing\ResourceRegistrar as OriginalRegistrar;
