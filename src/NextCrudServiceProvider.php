@@ -145,8 +145,9 @@ class NextCrudServiceProvider extends ServiceProvider
 
                 Route::group(['middleware' => ['role_or_permission:super-admin|' . $name . '-read']], function () use ($name, $controller) {
                     Route::any('/datatable/' . $name, [$controller, 'dataTable'])->name('datatable');
-                    Route::any($name, [$controller, 'index']);
-                    Route::any($name . '/{id}', [$controller, 'show']);
+                    Route::get($name, [$controller, 'index']);
+                    Route::post($name, [$controller, 'store']);
+                    Route::get($name . '/{id}', [$controller, 'show']);
                 });
             }
         });
